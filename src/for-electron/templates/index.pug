@@ -1,0 +1,13 @@
+html
+  head
+    script(src="script.js")
+    link(rel="stylesheet", href="style.css")
+    link(rel="stylesheet", href="animate.css")
+  body
+    #app.animated.fadeIn
+      ul
+        //- - for(var i = 0; i < data.length; i++ )
+        //-   li !{data[i]}
+        - for(var i = 0; i < data.length; i++ )
+          //- li !{data[i]}
+          li(onclick="send_event('" + data[i].cid + "')") #{data[i].showtext}

@@ -1,0 +1,105 @@
+{
+  "name": "smartLinkey",
+  "version": "2.3.0",
+  "description": "smartLinkey",
+  "main": "main_process.dist.js",
+  "private": true,
+  "scripts": {
+    "prebuild": "python ./py/check_guid.py && prepare-electron-dep.bat",
+    "build": "electron-builder.cmd main_process.dist.js",
+    "postinstall": "install-app-deps"
+  },
+  "author": "哈尔滨海邻科信息技术有限公司",
+  "build": {
+    "productName": "SmartLinkey",
+    "compression": "normal",
+    "electronVersion": "4.1.4",
+    "directories": {
+      "output": "./elect_builder_output"
+    },
+    "asar": true,
+    "asarUnpack": [
+      "dist"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/for-electron/source/logo.ico",
+      "legalTrademarks": "HyLink",
+      "files": [
+        "!downloads",
+        "!logs",
+        "!resources",
+        "!tests",
+        "!mock",
+        "!py",
+        "!src",
+        "!db.json",
+        "!main_process.js",
+        "!prepare-electron-dep.bat",
+        "!*.md",
+        "!*.log",
+        "!.webpackrc.js",
+        "!.stylelintrc",
+        "!.roadhogrc.mock.js",
+        "!.prettierrc",
+        "!.prettierignore",
+        "!.ga",
+        "!.eslintrc.js",
+        "!.eslintignore",
+        "!.babelrc.js",
+        "!LICENSE"
+      ]
+    },
+    "nsis": {
+      "shortcutName": "SmartLinkey",
+      "guid": "50c1930e-15ef-5300-9367-f5b10795c0e4",
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "extraFiles": [
+      "IconExtractor.exe",
+      "Newtonsoft.Json.dll",
+      ".electron-crates.txt",
+      "uplaunch.bat",
+      "uplaunch.vbs",
+      "fpatch.exe",
+      "guid.txt",
+      "bin",
+      "angel.dll",
+      "BottomHandle.exe",
+      "mfc120.dll",
+      "msvcp100.dll",
+      "msvcp100d.dll",
+      "msvcp120.dll",
+      "msvcp120d.dll",
+      "msvcr100.dll",
+      "msvcr100d.dll",
+      "msvcr110.dll",
+      "msvcr120.dll",
+      "msvcr120d.dll"
+    ]
+  },
+  "dependencies": {
+    "arch": "^2.1.1",
+    "auto-launch": "^5.0.5",
+    "bunyan": "^1.8.12",
+    "cors": "^2.8.4",
+    "electron-localshortcut": "^3.1.0",
+    "electron-pug": "^2.0.0",
+    "execa": "^0.10.0",
+    "express": "^4.16.4",
+    "ffi": "^2.3.0",
+    "lowdb": "^1.0.0",
+    "md5-file": "^4.0.0",
+    "moment": "^2.19.1",
+    "request": "^2.87.0",
+    "request-progress": "^3.0.0",
+    "windows-registry": "^0.1.3"
+  },
+  "devDependencies": {
+    "electron": "4.1.4"
+  }
+}

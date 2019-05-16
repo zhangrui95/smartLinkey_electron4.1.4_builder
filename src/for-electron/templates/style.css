@@ -1,0 +1,45 @@
+
+body {
+  font-family: "Microsoft Yahei", "\5B8B\4F53",  "Microsoft Sans Serif", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  font-size: 14px;
+  border-radius: 3px;
+  padding: 0;
+  width: 120px;
+  margin: 8px;
+}
+ul {
+  box-shadow: 0 0 4px #aaa;
+  background: #fff;
+  color: #333;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+li {
+  list-style:none;
+	height:30px;
+	line-height:30px;
+  text-align:center;
+  color: #333;
+	cursor: pointer;
+  transition:all ease 500ms;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  margin: 0;
+  padding: 0;
+}
+li:hover{
+  background-color: #1d94ee;
+  color: #fff
+}
+
+li:first-child { border-top: 0; }
+li + li + li { border-bottom: 0;}

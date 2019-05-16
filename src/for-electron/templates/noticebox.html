@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="animate.css">
+    <link rel="stylesheet" href="noticebox.css">
+    <style>
+      body { 
+        margin: 0; 
+        padding: 0; 
+        height: 100%; 
+        font-family:"Microsoft Yahei";
+        /* background-color: #FFCC00;  */
+      }
+      body::-webkit-scrollbar {
+        display: none;
+      }
+      #message::-webkit-scrollbar {
+        display: none;
+      }
+      h1 {
+        color: white;
+        margin-left: 10px;
+        font-size: 16px;
+        user-select: none;
+        font-weight: 100;
+      }
+      #notice {
+        width: 278px;
+        height: 398px;
+        margin: 0;
+        padding: 1px;
+        /* background-color: #5986b4; */
+        background-color: #283444;
+      }
+      #message {
+        width:100%;
+        height:340px;
+        overflow: scroll;
+        /* background-color: #5986b4; */
+        background-color: #283444;
+      }
+      .item {
+        position: relative;
+        margin:0 auto 10px;
+        width: 230px;
+        height: 100px;
+        padding-left: 15px;
+        border-radius:3px;
+        user-select: none;
+        /* border: 1px solid saddlebrown; */
+      }
+      .datetime {
+        font-size: 12px;
+        margin-top: 10px;
+        color: white;
+      }
+      .title {
+        width: 216px;
+        height: 35px;
+        margin-top: 5px;
+        font-size: 22px;
+        font-weight: lighter;
+        color: white;
+        border-bottom:1px solid rgba(255, 255, 255, 0.2);
+      }
+      .desc {
+        position: absolute;
+        top: 10px;
+        left: 70px;
+        font-size: 12px;
+        color: white;
+      }
+      .btns {
+        font-size: 14px;
+        color: white;
+        margin-top: 5px;
+      }
+      .btn {
+        margin-right: 8px;
+        cursor:pointer;
+      }
+      .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        cursor:pointer;
+      }
+      .app_close {
+        position: absolute;
+        right: 14px;
+        top: 12px;
+        cursor:pointer;
+      }
+      .bg-grey {
+        background-color: grey;
+        border: 1px solid grey;
+      }
+      .bg-blue {
+        background-color: #1f97ee;
+        border: 1px solid #1f97ee;
+      }
+      .bg-green {
+        background-color: #66b82f;
+        border: 1px solid #66b82f;
+      }
+      .bg-yellow {  
+        background-color: #db932d;
+        border: 1px solid #db932d;
+      }
+      .msg_count{
+        background: #1f97ee;
+        border-radius: 50px;
+        font-size: 12px;
+        padding: 2px 7px;
+        font-weight: 100;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <!-- <body id="app" style="-webkit-app-region: no-drag" class="animated slideInUp bounceInUp"> -->
+  <body id="app" style="-webkit-app-region: no-drag" class="animated slideInUp">
+    <div id="notice" >
+      <h1>消息提醒 <span id="msg_count" class="msg_count">0</span></h1>
+      <div class="app_close quit icon" onclick="close_noticebox()"></div>
+      <div id="message">
+        <!-- <section class="item bg-blue">
+          <div class="datetime">11:24</div>
+          <div class="title">案管</div>
+          <span class="desc">重要的案件提醒</span>
+          <div class="btns">
+            <a class="btn" url="http://www.baidu.com/" onclick="openUrl(this)">督办</a>
+            <a class="btn" url="http://www.baidu.com/" onclick="openUrl(this)">详情</a>
+          </div>
+          <div class="close icon" onclick="deleteItem(this)"></div>
+        </section> -->
+      </div>
+    </div>
+
+    <script>
+      var ipc = require('electron').ipcRenderer;
+      var message_count = 0;
+
+      function deleteItem(elem) {
+        elem.parentNode.className = 'item bg-grey animated heightOut';
+        setTimeout(() => {
+          elem.parentNode.remove()
+        }, 300);
+        var message=document.getElementById("message");
+        var msg_count=document.getElementById("msg_count");
+        // msg_count.innerHTML = message.childElementCount;
+        message_count = message_count - 1;
+        msg_count.innerHTML = message_count;
+      }
+
+      function openUrl(elem) {
+        // console.log(elem.getAttribute("url"))
+        ipc.send('visit-page', { url: elem.getAttribute("url") });
+        deleteItem(elem.parentNode)
+      }
+
+      function close_noticebox() {
+        document.getElementById('app').className = 'animated slideOutDown';
+        // document.getElementById('app').className = 'animated zoomOut';
+        setTimeout(() => {
+          window.close();
+        }, 1000);
+      }
+
+      function createItem(msg) {
+        var para=document.createElement("section");
+        para.classList.add("item");
+
+        // 时间
+        var datetime=document.createElement("div");
+        datetime.classList.add("datetime");
+        var datetime_node=document.createTextNode(msg.datetime);
+        datetime.appendChild(datetime_node);
+
+        // 系统名称
+        var title=document.createElement("div");
+        title.classList.add("title");
+        var title_node=document.createTextNode(msg.system);
+        title.appendChild(title_node);
+
+        // 消息类型描述
+        var desc=document.createElement("span");
+        desc.classList.add("desc");
+        var desc_node=document.createTextNode(msg.desc);
+        desc.appendChild(desc_node);
+
+        // 按钮区
+        var btns=document.createElement("div");
+        btns.classList.add("btns");
+
+        for (let i=0; i<msg.btns.length; i++) {
+          let child=document.createElement("a");
+          child.classList.add("btn");
+          child.setAttribute("url", msg.btns[i].url);
+          let child_text=document.createTextNode(msg.btns[i].text);
+          child.appendChild(child_text);
+          child.onclick = function () {
+            openUrl(this)
+          };
+          btns.appendChild(child);
+        }
+
+        // 关闭按钮
+        var close=document.createElement("div");
+        close.classList.add("close", "icon");
+        close.onclick = function () {
+          deleteItem(this)
+        };
+
+        para.appendChild(datetime);
+        para.appendChild(title);
+        para.appendChild(desc);
+        para.appendChild(btns);
+        para.appendChild(close);
+        para.classList.add(msg.color);
+        return para;
+      }
+
+      ipc.on('new', (event, msg) => {
+
+        const item = createItem(msg)
+        const element=document.getElementById("message");
+        element.appendChild(item);
+        // 修改计数器
+        var msg_count=document.getElementById("msg_count");
+        message_count = message_count + 1;
+        msg_count.innerHTML = message_count;
+
+        // 滚动至最新消息
+        element.scrollTop = element.scrollHeight;
+      })
+    </script>
+  </body>
+</html>

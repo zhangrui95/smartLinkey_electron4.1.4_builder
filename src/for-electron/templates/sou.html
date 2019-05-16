@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <style>
+    * {padding: 0; margin: 0;}
+    #app {
+      width: 40px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      color: #333;
+      box-shadow: 0 0 3px #aaa;
+      margin: 2px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      background: #fff;
+      user-select: none;
+    }
+    #app:hover{
+      background: #1d94ee;
+      color: #fff;
+    }
+    </style>
+  </head>
+  <body>
+    <!-- <div id="app" class="" onclick="open_select_card()">搜</div> -->
+    <!-- <div id="app" class="" onclick="open_select_card()" onmouseleave="closeWindow()">查</div> -->
+    <div id="app" class="" onclick="open_select_card()">查</div>
+  </body>
+  <script>
+  const { ipcRenderer } = require('electron');
+
+  function open_select_card() {
+    ipcRenderer.send('open-select-card');
+    // document.getElementById('app').className = 'animated bounceOut';
+    window.close();
+  }
+
+  function closeWindow(){
+    document.getElementById('app').className = 'animated fadeOut';
+    window.close();
+  }
+  </script>
+</html>
